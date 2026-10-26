@@ -1,0 +1,183 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
+
+data = [
+    ("Alina",40,"Female",153,65,0,1,15,5,130,140,27,2,1,"Diabetic"),
+    ("Alex",30,"Male",170,68,0,1,9,2,120,110,25,0,0,"Risk of Diabetes"),
+    ("Anila",32,"Female",150,65,1,1,12,1,140,150,30,1,1,"Diabetic"),
+    ("Declan",27,"Male",180,80,3,1,10,0,100,95,18,0,1,"Normal"),
+    ("Mikel",52,"Male",180,90,0,0,7,2,90,85,16,0,1,"Normal"),
+    ("Mansour",12,"Male",150,55,0,1,18,3,90,125,30,0,0,"Diabetic"),
+    ("Sam",42,"Male",174,55,0,1,16,2,120,200,2,0,1,"Diabetic Type1"),
+    ("Sarah",34,"Female",158,45,1,1,15,1,80,115,24,3,0,"Risk Of Diabetes"),
+    ("Anahita",25,"female",168,50,1,0,13,1,90,70,22,1,1,"Normal"),
+    ("Lara",22,"Female",155,40,0,0,15,0,70,105,18,0,1,"Normal"),
+    ("Hamid",40,"Male",183,65,2,1,14,1,95,130,29,0,0,"Diabetic"),
+    ("Anita",27,"Female",155,45,0,1,20,1,90,85,19,0,1,"Normal"),
+    ("Harry",24,"Male",178,64,2,0,9,3,80,300,1,0,0,"Diabetic Type1"),
+    ("Lina",28,"Female",150,48,0,1,12,0,145,95,22,3,1,"Normal"),
+    ("Armin",37,"Male",184,78,1,1,8,0,90,190,30,0,1,"Diabetic"),
+    ("Adil",30,"Male",175,55,1,1,18,1,80,105,24,0,1,"Risk of Diabetes"),
+    ("Mahsa",50,"Female",160,75,0,1,10,2,95,102,23,4,0,"Risk of Diabetes"),
+    ("Alexis",47,"Male",173,64,1,0,7,1,100,140,3,0,0,"Risk of Diabetes Type1"),
+    ("Maria",68,"Female",167,70,0,1,15,4,150,400,4,5,0,"Diabetic Type 1"),
+    ("Robin",39,"Male",169,65,0,0,11,1,120,90,23,0,0,"Normal"),
+    ("Jones",58,"Male",190,85,2,1,14,0,75,98,15,0,1,"Normal"),
+    ("Fatima",40,"Female",174,63,1,1,16,1,80,320,3,2,1,"Diabetic Type1"),
+    ("Imama",25,"Female",167,57,2,1,12,1,90,110,27,0,1,"Risk of Diabetes"),
+    ("Bahar",18,"Female",170,63,1,1,13,0,130,112,16,0,1,"Normal"),
+    ("Farhad",35,"Male",178,72,0,0,8,0,90,94,18,0,1,"Normal"),
+    ("Mursal",29,"Female",160,45,0,1,10,2,100,400,4,2,0,"Diabetic Type1"),
+    ("Martin",28,"Male",180,70,1,0,14,1,105,240,35,0,1,"Diabetic"),
+    ("Sohrab",36,"Male",178,74,3,1,11,0,140,87,13,0,1,"Normal"),
+    ("Sameer",14,"Male",155,40,0,1,20,3,90,200,3,0,0,"Diabetic Type1"),
+    ("Rustam",7,"Male",138,35,0,1,17,0,70,150,32,0,1,"Diabetic"),
+    ("Qubad",29,"Male",187,88,3,0,9,2,100,350,2,0,0,"Diabetic Type 1"),
+    ("Eraj",55,"Male",193,87,1,1,12,2,170,128,18,0,0,"Risk of Diabetes"),
+    ("Emra",17,"Female",173,65,2,0,6,1,85,200,27,0,1,"Diabetic"),
+    ("Hajar",78,"Female",160,75,0,1,22,6,150,460,1,5,0,"Diabetic Type1"),
+    ("Yasmin",15,"Female",150,38,0,0,9,3,90,140,31,0,1,"Diabetic"),
+    ("Raihana",40,"Female",170,65,2,0,16,0,150,80,20,3,1,"Normal"),
+    ("Faisal",30,"Male",180,78,1,0,10,2,85,125,27,0,0,"Risk of Diabetes"),
+    ("Amir",8,"Male",140,28,0,1,13,0,80,140,3,0,1,"Diabetic Type1"),
+    ("Fariha",26,"Female",166,57,1,1,8,0,95,107,14,3,1,"Risk of Diabetes"),
+    ("Ozair",23,"Male",174,57,2,0,7,0,90,150,29,0,1,"Diabetic"),
+    ("Jahed",20,"Male",164,80,0,1,15,2,140,95,15,0,0,"Normal"),
+    ("Safa",28,"Female",172,68,0,0,18,1,80,100,25,0,0,"Risk of Diabetes"),
+    ("Parwiz",20,"Male",180,72,2,1,14,0,90,118,26,0,1,"Risk of Diabetes"),
+    ("MehrMah",4,"Female",95,19,0,0,7,3,130,155,28,0,0,"Diabetic"),
+    ("Amin",40,"Male",167,58,1,1,15,0,100,95,16,0,1,"Normal"),
+    ("Masih",16,"Male",170,60,1,1,15,0,75,180,27,0,0,"Diabetic"),
+    ("Khalida",64,"Female",160,40,0,1,8,1,95,85,10,1,0,"Normal"),
+    ("Hameed",29,"Male",190,85,2,1,10,0,100,108,26,0,1,"Risk of Diabetes"),
+    ("Arsalan",3,"Male",100,16,0,0,9,0,80,150,35,0,1,"Diabetic"),
+    ("Aziz",46,"Male",175,65,1,0,8,0,100,120,30,0,1,"Risk of Diabetes"),
+    ("Yasir",32,"Male",189,71,2,0,12,0,95,305,1,0,1,"Diabetic Type1"),
+    ("Arash",18,"Male",160,50,0,0,15,2,160,140,30,0,0,"Diabetic"),
+    ("Milad",20,"Male",170,40,1,0,17,0,120,200,3,0,1,"Diabetic Type1"),
+    ("Abdullah",19,"Male",182,72,0,0,7,4,80,80,13,0,1,"Normal"),
+    ("Omar",9,"Male",150,30,0,0,5,1,100,105,24,0,1,"Risk of Diabetes"),
+    ("Muska",35,"Female",160,49,0,1,9,1,80,75,8,3,0,"Normal"),
+    ("Shoaib",43,"Male",170,50,0,1,20,0,75,200,30,0,1,"Diabetic"),
+    ("Parsa",15,"Male",178,90,0,0,10,3,90,95,18,0,1,"Normal"),
+    ("Elyas",25,"Male",158,40,0,1,8,0,160,250,35,0,1,"Diabetic"),
+    ("Musawer",28,"Male",170,75,0,0,9,1,180,70,14,0,1,"Normal"),
+    ("Asila",23,"Female",155,45,1,1,12,0,190,89,12,0,1,"Normal"),
+    ("Ayoub",60,"Male",178,79,0,0,10,0,150,80,10,0,1,"Normal"),
+    ("Seema",50,"Female",150,75,0,1,15,1,140,95,18,0,1,"Normal"),
+    ("Muazamil",20,"Male",180,64,1,0,8,1,75,290,1,0,1,"Diabetic Type1"),
+    ("Laila",90,"Female",154,40,0,1,22,2,90,200,40,7,1,"Diabetic"),
+    ("Lima",30,"Female",164,80,0,0,20,0,180,99,15,2,0,"Normal"),
+    ("Fardin",5,"Male",140,20,0,0,8,0,70,100,25,0,1,"Risk of Diabetes"),
+    ("Farzad",7,"Male",130,25,0,1,18,1,80,90,20,0,1,"Normal"),
+    ("Sahar",18,"Female",174,54,1,1,17,0,95,115,25,0,0,"Risk of Diabetes"),
+    ("Farid",30,"Male",189,81,2,1,15,0,95,110,4,0,0,"Risk of Diabetes Type1"),
+    ("Humaira",25,"Female",168,80,0,1,12,0,100,200,35,0,0,"Diabetic"),
+    ("Anisa",100,"Female",145,30,0,1,8,1,140,75,12,3,1,"Normal"),
+    ("Haidar",14,"Male",160,50,1,1,10,0,80,160,32,0,1,"Diabetic"),
+    ("Imama",30,"Female",174,65,0,0,15,0,140,110,7,0,1,"Risk of Diabetes Type1"),
+    ("Manizha",1,"Female",40,10,0,0,8,0,75,150,30,0,1,"Diabetic"),
+    ("Shabir",3,"Male",50,12,0,1,10,1,85,85,14,0,0,"Normal"),
+    ("Diba",45,"Female",150,45,0,0,9,0,140,100,25,1,1,"Risk of Diabetes"),
+    ("Diana",55,"Female",167,40,0,1,10,2,85,300,4,3,0,"Diabetic Type1"),
+    ("Younes",22,"Male",180,74,1,1,8,0,100,170,35,0,1,"Diabetic"),
+    ("Hasib",38,"Male",158,40,0,1,18,0,140,80,10,0,1,"Normal"),
+    ("Omid",27,"Male",184,60,1,1,18,0,120,170,28,0,1,"Diabetic"),
+    ("Sajad",16,"Male",177,72,1,0,10,0,150,85,15,0,1,"Normal"),
+    ("Wajed",18,"Male",184,74,2,1,15,0,80,105,24,0,1,"Risk of Diabetes"),
+    ("Wares",40,"Male",156,48,0,0,10,1,85,140,5,0,0,"Diabetic Type1"),
+    ("Sadeq",70,"Male",167,65,1,1,17,1,130,90,15,0,1,"Normal"),
+    ("Ayleen",5,"Female",120,25,0,0,7,0,75,70,10,0,1,"Normal"),
+    ("Pakiza",90,"Female",178,64,0,1,15,2,80,200,30,5,0,"Diabetic"),
+    ("Fazil",18,"Male",165,50,0,1,10,0,90,120,23,0,1,"Risk of Diabetes"),
+    ("Arya",22,"Female",154,35,0,1,8,1,85,400,1,0,0,"Diabetic Type1"),
+    ("Hamasa",34,"Female",160,70,0,1,8,3,80,180,30,1,1,"Diabetic"),
+    ("Giti",45,"Female",170,60,1,1,8,0,75,100,25,1,1,"Risk of Diabetes"),
+    ("Baran",56,"Female",166,40,0,1,18,1,140,300,40,0,0,"Diabetic"),
+    ("Freshta",43,"Female",154,50,0,0,10,0,120,95,15,2,1,"Normal"),
+    ("Soroosh",19,"Male",180,70,1,1,18,0,80,110,25,0,1,"Risk of Diabetes"),
+    ("Tabasum",28,"Female",165,48,0,0,20,0,95,220,1,0,1,"Diabetic Type1"),
+    ("Ramisha",60,"Female",182,55,0,0,9,0,85,80,20,0,0,"Normal"),
+    ("Sharif",7,"Male",140,23,0,1,10,1,75,120,27,0,1,"Risk of Diabetes"),
+
+]
+
+df = pd.DataFrame(data, columns=[
+    "Name",
+    "Age",
+    "Gender",
+    "Height",
+    "Weight",
+    "PhysicalActivity",
+    "ExcessiveThirst",
+    "UrinationFrequency",
+    "SweetsConsumption",
+    "BloodPressure",
+    "Glucose",
+    "Insulin",
+    "Pregnancies",
+    "FamilyHistory",
+    "DiabetesStatus"
+])
+df['Gender'] = df['Gender'].str.strip().str.lower().map({'male': 1, 'female': 0})
+df["DiabetesStatus"] = df ["DiabetesStatus"].str.strip()
+df ["DiabetesStatus"] = df ["DiabetesStatus"].str.strip().replace({
+    "Risk Of Diabetes" : "Risk of Diabetes",
+    "Diabetic Type 1" : "Diabetic Type1",
+    "Risk of Diabetic Type 1" : "Risk of Diabetic Type1",
+    "Risk Of Diabetic Type1": "Risk of Diabetic Type1"
+    })
+print(df["DiabetesStatus"].value_counts())
+print(df["DiabetesStatus"].isna().sum())
+features = df[[
+     "Age",
+    "Gender",
+    "Height",
+    "Weight",
+    "PhysicalActivity",
+    "ExcessiveThirst",
+    "UrinationFrequency",
+    "SweetsConsumption",
+     "Glucose",
+    "Insulin",
+    "Pregnancies",
+    "FamilyHistory"
+ ]]
+x = features
+y = df ['DiabetesStatus']
+x_train,x_test,y_train,y_test=train_test_split(
+    x,
+    y,
+    test_size=0.2,
+    random_state=42
+)
+model=DecisionTreeClassifier()
+model.fit(x_train,y_train)
+
+
+
+
+Age= float(input("Enter Age"))
+Gender = int(input("Enter Gender(Male=1,Female=0):"))
+Height= float(input("Enter Height"))
+Weight= float(input("Enter Weight"))
+PhysicalActivity=float(input("Enter Activity"))
+Thrist=int(input("Excessice Thrist)Yes=1,NO=0"))
+Urination=float(input("Enter Urination"))
+Sweets=float(input("Enter Sweets AUsed"))
+Glocose=float(input("Enter Glocose Level"))
+Insulin=float(input("Insulin Level"))
+Pregancies=int(input("Enter Number of Pregancies(0 if Male,1 if Female0):"))
+FamiilyHistory=int(input("Enter Family History(Yes=1,No=0):"))
+new_patient = [[Age,Gender,Height,Weight,PhysicalActivity,Thrist,Urination,Sweets,Glocose,Insulin,Pregancies,FamiilyHistory]]
+new_prediction=model.predict(new_patient)
+print (new_prediction)
+ 
+
+prediction=model.predict(x_test)
+print (accuracy_score(y_test,prediction))
+probabilities = model.predict_proba(new_patient)
+for name, probability in zip(model.classes_, probabilities[0]):
+    print(name, round(probability * 100, 2), "%")
